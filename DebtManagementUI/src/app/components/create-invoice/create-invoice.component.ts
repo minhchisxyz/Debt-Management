@@ -174,6 +174,7 @@ export class CreateInvoiceComponent implements OnInit {
   }
 
   createInvoice() {
+    console.log(this.invoice)
     this.error = ''
     if (!this.invoice.date) {
       this.invoice.date = new Date().toISOString().slice(0, 10)

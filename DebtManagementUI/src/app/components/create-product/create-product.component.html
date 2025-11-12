@@ -1,129 +1,141 @@
-<!-- Modal -->
-<div class="modal fade" id="createProduct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createProductLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="createProductLabel">{{ title }}</h1>
-        <button mat-mini-fab
-                color="warn"
-                class="button-close"
-                data-bs-dismiss="modal"
-                matTooltip="Đóng"
-                aria-label="Close">
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="alert alert-danger" role="alert" *ngIf="error.length">
-          {{ error }}
+<form (ngSubmit)="onSubmit()" #productForm="ngForm">
+  <!-- Modal -->
+  <div class="modal fade" id="createProduct" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createProductLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="createProductLabel">{{ title }}</h1>
+          <button mat-mini-fab
+                  color="warn"
+                  class="button-close"
+                  data-bs-dismiss="modal"
+                  matTooltip="Đóng"
+                  type="button"
+                  aria-label="Close">
+            <mat-icon>close</mat-icon>
+          </button>
         </div>
-        <div class="alert alert-success" role="alert" *ngIf="msg.length">
-          {{ msg }}
-        </div>
-        <div>
-          <div class="card card-body container-sm">
-            <div>
-              <mat-form-field style="width: 45%">
-                <mat-label>Mã sản phẩm</mat-label>
-                <input type="text"
-                       placeholder="DG01"
-                       matInput
-                       [(ngModel)]="product.productId">
-              </mat-form-field>
+        <div class="modal-body">
+          <div class="alert alert-danger" role="alert" *ngIf="error.length">
+            {{ error }}
+          </div>
+          <div class="alert alert-success" role="alert" *ngIf="msg.length">
+            {{ msg }}
+          </div>
+          <div>
+            <div class="card card-body container-sm">
+              <div>
+                <mat-form-field style="width: 45%">
+                  <mat-label>Mã sản phẩm</mat-label>
+                  <input type="text"
+                         placeholder="DG01"
+                         matInput
+                         name="productId"
+                         [(ngModel)]="product.productId">
+                </mat-form-field>
 
-              <mat-form-field style="width: 45%">
-                <mat-label>Tên sản phẩm</mat-label>
-                <input type="text"
-                       placeholder="DG01"
-                       matInput
-                       [(ngModel)]="product.name">
-              </mat-form-field>
+                <mat-form-field style="width: 45%">
+                  <mat-label>Tên sản phẩm</mat-label>
+                  <input type="text"
+                         placeholder="DG01"
+                         matInput
+                         name="name"
+                         [(ngModel)]="product.name">
+                </mat-form-field>
 
-              <button mat-icon-button
-                      (click)="addSpecification()"
-                      tabindex="-1"
-                      matTooltip="Thêm quy cách đóng gói">
-                <mat-icon>add</mat-icon>
-              </button>
-            </div>
+                <button mat-icon-button
+                        (click)="addSpecification()"
+                        tabindex="-1"
+                        type="button"
+                        matTooltip="Thêm quy cách đóng gói">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
 
-            <div *ngIf="specifications.length">
-              <h4>Quy cách đóng gói sản phẩm</h4>
-              <div *ngFor="let i of Array.from(Array(specifications.length).keys())">
-                <div>
-                  <span class="input-group-text">Quy cách {{ i + 1 }}</span>
-                  <mat-form-field style="width: 30%">
-                    <mat-label>Đơn vị tính</mat-label>
-                    <input type="text"
-                           placeholder="Gói/Bao/Chai..."
-                           matInput
-                           [(ngModel)]=specifications[i].unit>
-                  </mat-form-field>
+              <div *ngIf="specifications.length">
+                <h4>Quy cách đóng gói sản phẩm</h4>
+                <div *ngFor="let i of Array.from(Array(specifications.length).keys())">
+                  <div>
+                    <span class="input-group-text">Quy cách {{ i + 1 }}</span>
+                    <mat-form-field style="width: 30%">
+                      <mat-label>Đơn vị tính</mat-label>
+                      <input type="text"
+                             placeholder="Gói/Bao/Chai..."
+                             matInput
+                             name="{{i}}-unit"
+                             [(ngModel)]=specifications[i].unit>
+                    </mat-form-field>
 
-                  <mat-form-field style="width: 30%">
-                    <mat-label>Giá tiền</mat-label>
-                    <input type="number"
-                           min = "1"
-                           step= "1"
-                           placeholder="100.000"
-                           matInput
-                           [(ngModel)]=specifications[i].price>
-                  </mat-form-field>
+                    <mat-form-field style="width: 30%">
+                      <mat-label>Giá tiền</mat-label>
+                      <input type="number"
+                             min = "1"
+                             step= "1"
+                             placeholder="100.000"
+                             matInput
+                             name="{{i}}-price"
+                             [(ngModel)]=specifications[i].price>
+                    </mat-form-field>
 
-                  <mat-form-field style="width: 30%">
-                    <mat-label>Số lượng mỗi thùng</mat-label>
-                    <input type="text"
-                           placeholder="50"
-                           matInput
-                           [(ngModel)]=specifications[i].amountPerBox>
-                  </mat-form-field>
+                    <mat-form-field style="width: 30%">
+                      <mat-label>Số lượng mỗi thùng</mat-label>
+                      <input type="text"
+                             placeholder="50"
+                             matInput
+                             name="{{i}}-amountPerBox"
+                             [(ngModel)]=specifications[i].amountPerBox>
+                    </mat-form-field>
 
-                  <button mat-icon-button
-                          tabindex="-1"
-                          matTooltip="Xóa quy cách {{ i + 1 }}"
-                          (click)="removeSpecification(i)">
-                    <mat-icon>remove</mat-icon>
-                  </button>
+                    <button mat-icon-button
+                            tabindex="-1"
+                            matTooltip="Xóa quy cách {{ i + 1 }}"
+                            type="button"
+                            (click)="removeSpecification(i)">
+                      <mat-icon>remove</mat-icon>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="modal-footer" *ngIf="!editMode else edit">
-        <button mat-mini-fab
-                color="primary"
-                matTooltip="Làm mới"
-                (click)="reset()">
-          <mat-icon>refresh</mat-icon>
-        </button>
-        <button mat-mini-fab
-                color="accent"
-                matTooltip="Thêm"
-                (click)="createProduct()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-
-      <ng-template #edit>
-        <div class="modal-footer">
+        <div class="modal-footer" *ngIf="!editMode else edit">
           <button mat-mini-fab
-                  color="warn"
-                  tabindex="-1"
-                  data-bs-toggle="modal"
-                  (click)="deleteProduct()"
-                  matTooltip="Xóa"
-                  data-bs-target="#deleteModal">
-            <mat-icon>delete</mat-icon>
+                  color="primary"
+                  matTooltip="Làm mới"
+                  type="button"
+                  (click)="reset()">
+            <mat-icon>refresh</mat-icon>
           </button>
           <button mat-mini-fab
                   color="accent"
-                  matTooltip="Chỉnh sửa"
-                  (click)="updateProduct()">
-            <mat-icon>edit</mat-icon>
+                  matTooltip="Thêm"
+                  type="submit">
+            <mat-icon>add</mat-icon>
           </button>
         </div>
-      </ng-template>
+
+        <ng-template #edit>
+          <div class="modal-footer">
+            <button mat-mini-fab
+                    color="warn"
+                    tabindex="-1"
+                    data-bs-toggle="modal"
+                    (click)="deleteProduct()"
+                    matTooltip="Xóa"
+                    type="button"
+                    data-bs-target="#deleteModal">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-mini-fab
+                    color="accent"
+                    matTooltip="Chỉnh sửa"
+                    type="submit">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </ng-template>
+      </div>
     </div>
   </div>
-</div>
+</form>

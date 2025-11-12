@@ -7,7 +7,9 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "gen-api": "ng-openapi-gen --input ./src/openapi/openapi.json --output ./src/app/api-services"
+    "gen-api": "ng-openapi-gen --input ./src/openapi/openapi.json --output ./src/app/api-services",
+    "deploy": "ng build --configuration=production && move \"C:\\Users\\diepm\\Desktop\\git\\Debt-Management\\DebtManagementUI\\dist\\DebtManagementUI\\browser\" \"C:\\Users\\diepm\\Desktop\\git\\Debt-Management\\DebtManagement\\src\\main\\resources\" && rmdir /s /q \"C:\\Users\\diepm\\Desktop\\git\\Debt-Management\\DebtManagement\\src\\main\\resources\\static\" && ren \"C:\\Users\\diepm\\Desktop\\git\\Debt-Management\\DebtManagement\\src\\main\\resources\\browser\" \"static\" && copy \"C:\\Users\\diepm\\Desktop\\git\\Debt-Management\\DebtManagement\\src\\main\\resources\\static\\index.html\" \"C:\\Users\\diepm\\Desktop\\git\\Debt-Management\\DebtManagement\\src\\main\\resources\\static\\404.html\"",
+    "commit-push": "cd .. && git add DebtManagement DebtManagementUI && git commit -m \"fix routerLink for year, add tooltip for transactions\" && git push"
   },
   "private": true,
   "dependencies": {
@@ -27,9 +29,12 @@
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@ng-bootstrap/ng-bootstrap": "^16.0.0",
     "@popperjs/core": "^2.11.8",
+    "@tailwindcss/postcss": "^4.1.17",
     "bootstrap": "^5.3.3",
     "moment": "^2.30.1",
+    "postcss": "^8.5.6",
     "rxjs": "~7.8.0",
+    "tailwindcss": "^4.1.17",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"
   },

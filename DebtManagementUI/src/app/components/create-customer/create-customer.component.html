@@ -1,87 +1,93 @@
-<!-- Modal -->
-<div class="modal fade" id="createCustomer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createCustomerLabel" aria-hidden="true">
-  <div class="modal-dialog modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="createCustomerLabel"> {{ title }} </h1>
-        <button mat-mini-fab
-                color="warn"
-                class="button-close"
-                data-bs-dismiss="modal"
-                matTooltip="Đóng"
-                aria-label="Close">
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="alert alert-danger" role="alert" *ngIf="error.length">
-          {{ error }}
+<form (ngSubmit)="onSubmit()" #customerForm="ngForm">
+  <!-- Modal -->
+  <div class="modal fade" id="createCustomer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createCustomerLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="createCustomerLabel"> {{ title }} </h1>
+          <button mat-mini-fab
+                  color="warn"
+                  class="button-close"
+                  data-bs-dismiss="modal"
+                  type="button"
+                  matTooltip="Đóng"
+                  aria-label="Close">
+            <mat-icon>close</mat-icon>
+          </button>
         </div>
-        <div class="alert alert-success" role="alert" *ngIf="msg.length">
-          {{ msg }}
-        </div>
-        <div>
-          <div class="card card-body container-sm">
-            <div>
-              <mat-form-field style="width: 30%">
-                <mat-label>Mã khách hàng</mat-label>
-                <input type="text" matInput [(ngModel)]="customer.customerId" placeholder="dieptronghuy">
-              </mat-form-field>
+        <div class="modal-body">
+          <div class="alert alert-danger" role="alert" *ngIf="error.length">
+            {{ error }}
+          </div>
+          <div class="alert alert-success" role="alert" *ngIf="msg.length">
+            {{ msg }}
+          </div>
+          <div>
+            <div class="card card-body container-sm">
+              <div>
+                <mat-form-field style="width: 30%">
+                  <mat-label>Mã khách hàng</mat-label>
+                  <input type="text" matInput name="customerId" [(ngModel)]="customer.customerId" placeholder="dieptronghuy">
+                </mat-form-field>
 
-              <mat-form-field style="width: 30%">
-                <mat-label>Tên khách hàng</mat-label>
-                <input type="text" matInput [(ngModel)]="customer.name" placeholder="Diệp Trọng Huy">
-              </mat-form-field>
+                <mat-form-field style="width: 30%">
+                  <mat-label>Tên khách hàng</mat-label>
+                  <input type="text" matInput name="name" [(ngModel)]="customer.name" placeholder="Diệp Trọng Huy">
+                </mat-form-field>
 
-              <mat-form-field style="width: 20%">
-                <mat-label>Số điện thoại</mat-label>
-                <input type="text" matInput [(ngModel)]="customer.telephone" placeholder="0902386997">
-              </mat-form-field>
+                <mat-form-field style="width: 20%">
+                  <mat-label>Số điện thoại</mat-label>
+                  <input type="text" matInput name="telephone" [(ngModel)]="customer.telephone" placeholder="0902386997">
+                </mat-form-field>
 
-              <mat-form-field style="width: 20%">
-                <mat-label>Tỉnh/Thành phố</mat-label>
-                <input type="text" matInput [(ngModel)]="customer.province" placeholder="Sài Gòn">
-              </mat-form-field>
+                <mat-form-field style="width: 20%">
+                  <mat-label>Tỉnh/Thành phố</mat-label>
+                  <input type="text" matInput name="province" [(ngModel)]="customer.province" placeholder="Sài Gòn">
+                </mat-form-field>
 
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="modal-footer" *ngIf="!editMode else edit">
-        <button mat-mini-fab
-                color="primary"
-                matTooltip="Làm mới"
-                (click)="reset()">
-          <mat-icon>refresh</mat-icon>
-        </button>
-        <button mat-mini-fab
-                color="accent"
-                matTooltip="Thêm"
-                (click)="createCustomer()">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-
-      <ng-template #edit>
-        <div class="modal-footer">
+        <div class="modal-footer" *ngIf="!editMode else edit">
           <button mat-mini-fab
-                  color="warn"
-                  matTooltip="Xóa"
-                  tabindex="-1"
-                  data-bs-toggle="modal"
-                  (click)="deleteCustomer()"
-                  data-bs-target="#deleteModal">
-            <mat-icon>delete</mat-icon>
+                  color="primary"
+                  matTooltip="Làm mới"
+                  type="button"
+                  (click)="reset()">
+            <mat-icon>refresh</mat-icon>
           </button>
           <button mat-mini-fab
                   color="accent"
-                  matTooltip="Chỉnh sửa"
-                  (click)="updateCustomer()">
-            <mat-icon>edit</mat-icon>
+                  matTooltip="Thêm"
+                  type="submit">
+            <mat-icon>add</mat-icon>
           </button>
         </div>
-      </ng-template>
+
+        <ng-template #edit>
+          <div class="modal-footer">
+            <button mat-mini-fab
+                    color="warn"
+                    matTooltip="Xóa"
+                    tabindex="-1"
+                    data-bs-toggle="modal"
+                    (click)="deleteCustomer()"
+                    type="button"
+                    data-bs-target="#deleteModal">
+              <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-mini-fab
+                    color="accent"
+                    matTooltip="Chỉnh sửa"
+                    type="submit">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </div>
+        </ng-template>
+      </div>
     </div>
   </div>
-</div>
+
+</form>

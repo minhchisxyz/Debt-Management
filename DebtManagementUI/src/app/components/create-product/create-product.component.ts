@@ -197,4 +197,12 @@ export class CreateProductComponent implements OnInit{
       id: this.id
     })
   }
+
+  onSubmit() {
+    if (this.editMode) {
+      this.updateProduct()
+    } else {
+      this.createProduct()
+    }
+  }
 }

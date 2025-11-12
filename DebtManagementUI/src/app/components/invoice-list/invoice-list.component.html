@@ -64,13 +64,13 @@
           </mat-date-range-input>
           <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-date-range-picker #picker></mat-date-range-picker>
+          <button mat-icon-button matSuffix (click)="clear('date')">
+            <mat-icon>close</mat-icon>
+          </button>
         </mat-form-field>
-        <button mat-icon-button (click)="filter()">
+        <!--<button mat-icon-button (click)="filter()">
           <mat-icon>search</mat-icon>
-        </button>
-        <button mat-icon-button matSuffix (click)="clear('date')">
-          <mat-icon>close</mat-icon>
-        </button>
+        </button>-->
       </th>
       <td mat-cell *matCellDef="let invoice"> {{ dateService.formatDate(invoice.date || '') }} </td>
     </ng-container>

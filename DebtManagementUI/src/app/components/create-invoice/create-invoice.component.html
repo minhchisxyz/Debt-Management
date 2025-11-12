@@ -1,150 +1,156 @@
-<!-- Modal -->
-<div class="modal fade" id="createInvoice" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createInvoiceLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable modal-xl">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="createInvoiceLabel">{{ title }}</h1>
-        <button mat-mini-fab
-                color="warn"
-                class="button-close"
-                data-bs-dismiss="modal"
-                matTooltip="Đóng"
-                aria-label="Close">
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="alert alert-danger" role="alert" *ngIf="error.length">
-          {{ error }}
+<form (ngSubmit)="createInvoice()" #invoiceForm="ngForm">
+  <!-- Modal -->
+  <div class="modal fade" id="createInvoice" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="createInvoiceLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="createInvoiceLabel">{{ title }}</h1>
+          <button mat-mini-fab
+                  color="warn"
+                  class="button-close"
+                  data-bs-dismiss="modal"
+                  matTooltip="Đóng"
+                  type="button"
+                  aria-label="Close">
+            <mat-icon>close</mat-icon>
+          </button>
         </div>
-        <div class="alert alert-success" role="alert" *ngIf="msg">
-          {{ msg }}
-        </div>
-        <div>
-          <div class="card card-body container-sm">
-            <div>
-              <mat-form-field style="width: 30%">
-                <mat-label>Số hóa đơn</mat-label>
-                <input type="text" matInput [(ngModel)]="invoice.id" placeholder="170903">
-              </mat-form-field>
+        <div class="modal-body">
+          <div class="alert alert-danger" role="alert" *ngIf="error.length">
+            {{ error }}
+          </div>
+          <div class="alert alert-success" role="alert" *ngIf="msg">
+            {{ msg }}
+          </div>
+          <div>
+            <div class="card card-body container-sm">
+              <div>
+                <mat-form-field style="width: 30%">
+                  <mat-label>Số hóa đơn</mat-label>
+                  <input type="text" matInput name="id" [(ngModel)]="invoice.id" placeholder="170903">
+                </mat-form-field>
 
-              <mat-form-field style="width: 35%" appearance="fill">
-                <mat-label>Mã khách hàng:</mat-label>
-                <input matInput
-                       #customerIdInput
-                       type="text"
-                       placeholder="dieptronghuy"
-                       [formControl]="customerIdControl"
-                       [matAutocomplete]="auto"
-                       (input)="filter('customer', 0)"
-                       (focus)="filter('customer', 0)">
-                <mat-autocomplete requireSelection #auto="matAutocomplete">
-                  @for (customerId of filteredCustomers; track customerId) {
-                    <mat-option value="{{customerId}}">{{ customerId }}</mat-option>
+                <mat-form-field style="width: 35%" appearance="fill">
+                  <mat-label>Mã khách hàng:</mat-label>
+                  <input matInput
+                         #customerIdInput
+                         type="text"
+                         placeholder="dieptronghuy"
+                         [formControl]="customerIdControl"
+                         [matAutocomplete]="auto"
+                         (input)="filter('customer', 0)"
+                         (focus)="filter('customer', 0)">
+                  <mat-autocomplete requireSelection #auto="matAutocomplete">
+                    @for (customerId of filteredCustomers; track customerId) {
+                      <mat-option value="{{customerId}}">{{ customerId }}</mat-option>
+                    }
+                  </mat-autocomplete>
+                  @if (customerIdControl.hasError('required')) {
+                    <mat-error>Vui lòng chọn</mat-error>
                   }
-                </mat-autocomplete>
-                @if (customerIdControl.hasError('required')) {
-                  <mat-error>Vui lòng chọn</mat-error>
-                }
-              </mat-form-field>
+                </mat-form-field>
 
-              <mat-form-field style="width: 30%">
-                <mat-label>Chọn ngày</mat-label>
-                <input matInput [matDatepicker]="dp" [formControl]="date" (dateChange)="updateDate($event)">
-                <mat-hint>Ngày/Tháng/Năm</mat-hint>
-                <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
-                <mat-datepicker #dp></mat-datepicker>
-              </mat-form-field>
+                <mat-form-field style="width: 30%">
+                  <mat-label>Chọn ngày</mat-label>
+                  <input matInput [matDatepicker]="dp" [formControl]="date" (dateChange)="updateDate($event)">
+                  <mat-hint>Ngày/Tháng/Năm</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+                  <mat-datepicker #dp></mat-datepicker>
+                </mat-form-field>
 
-              <button mat-icon-button
-                      style="width: auto"
-                      (click)="addLine()"
-                      tabindex="-1"
-                      matTooltip="Thêm dòng">
-                <mat-icon>add</mat-icon>
-              </button>
-            </div>
+                <button mat-icon-button
+                        style="width: auto"
+                        (click)="addLine()"
+                        tabindex="-1"
+                        type="button"
+                        matTooltip="Thêm dòng">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
 
-            <div *ngIf="invoiceLines.length">
-              <h4>Chi tiết hóa đơn</h4>
-              <div *ngFor="let i of Array.from(Array(invoiceLines.length).keys())">
-                <div>
-                  <span class="input-group-text" style="font-weight: bold">Dòng {{ i + 1 }}</span>
+              <div *ngIf="invoiceLines.length">
+                <h4>Chi tiết hóa đơn</h4>
+                <div *ngFor="let i of Array.from(Array(invoiceLines.length).keys())">
+                  <div>
+                    <span class="input-group-text" style="font-weight: bold">Dòng {{ i + 1 }}</span>
 
-                  <mat-form-field style="width: 20%">
-                    <mat-label>Ghi chú</mat-label>
-                    <input matInput [(ngModel)]="invoiceLines[i].note" placeholder="Giao vào sáng mai">
-                  </mat-form-field>
+                    <mat-form-field style="width: 20%">
+                      <mat-label>Ghi chú</mat-label>
+                      <input matInput name="{{i}}-note" [(ngModel)]="invoiceLines[i].note" placeholder="Giao vào sáng mai">
+                    </mat-form-field>
 
-                  <mat-form-field style="width: 15%">
-                    <mat-label>Mã sản phẩm</mat-label>
-                    <input matInput
-                           [id]="'product'+i"
-                           #productIdInputs
-                           type="text"
-                           placeholder="DG01"
-                           [formControl]="productIdControl[i]"
-                           [matAutocomplete]="auto"
-                           (input)="filter('product', i)"
-                           (focus)="filter('product', i)">
-                    <mat-autocomplete requireSelection #auto="matAutocomplete">
-                      @for(productId of filteredProducts; track productId) {
-                        <mat-option value="{{ productId }}">{{ productId }}</mat-option>
+                    <mat-form-field style="width: 15%">
+                      <mat-label>Mã sản phẩm</mat-label>
+                      <input matInput
+                             [id]="'product'+i"
+                             #productIdInputs
+                             type="text"
+                             placeholder="DG01"
+                             [formControl]="productIdControl[i]"
+                             [matAutocomplete]="auto"
+                             (input)="filter('product', i)"
+                             (focus)="filter('product', i)">
+                      <mat-autocomplete requireSelection #auto="matAutocomplete">
+                        @for(productId of filteredProducts; track productId) {
+                          <mat-option value="{{ productId }}">{{ productId }}</mat-option>
+                        }
+                      </mat-autocomplete>
+                      @if (productIdControl[i].hasError('required')) {
+                        <mat-error>Vui lòng chọn</mat-error>
                       }
-                    </mat-autocomplete>
-                    @if (productIdControl[i].hasError('required')) {
-                      <mat-error>Vui lòng chọn</mat-error>
-                    }
-                  </mat-form-field>
+                    </mat-form-field>
 
-                  <mat-form-field style="width: 25%">
-                    <mat-label>Tên sản phẩm</mat-label>
-                    <input type="text" disabled matInput value="{{getProductName(productIdControl[i].value || '')}}">
-                  </mat-form-field>
+                    <mat-form-field style="width: 25%">
+                      <mat-label>Tên sản phẩm</mat-label>
+                      <input type="text" disabled matInput value="{{getProductName(productIdControl[i].value || '')}}">
+                    </mat-form-field>
 
-                  <mat-form-field style="width: 25%">
-                    <mat-label>Quy cách</mat-label>
-                    <mat-select [(value)]="invoiceLines[i].specificationId" [formControl]="specificationControl[i]" required>
-                      <mat-option *ngFor="let specification of filterSpecifications(invoiceLines[i].productId || '')"
-                                  value="{{ specification.id }}">Giá: {{ specification.price }} đồng, {{ specification.amountPerBox }} {{specification.unit }} mỗi thùng
-                      </mat-option>
-                    </mat-select>
-                    @if (specificationControl[i].hasError('required')) {
-                      <mat-error>Vui lòng chọn</mat-error>
-                    }
-                  </mat-form-field>
+                    <mat-form-field style="width: 25%">
+                      <mat-label>Quy cách</mat-label>
+                      <mat-select [(value)]="invoiceLines[i].specificationId" [formControl]="specificationControl[i]" required>
+                        <mat-option *ngFor="let specification of filterSpecifications(invoiceLines[i].productId || '')"
+                                    value="{{ specification.id }}">Giá: {{ specification.price }} đồng, {{ specification.amountPerBox }} {{specification.unit }} mỗi thùng
+                        </mat-option>
+                      </mat-select>
+                      @if (specificationControl[i].hasError('required')) {
+                        <mat-error>Vui lòng chọn</mat-error>
+                      }
+                    </mat-form-field>
 
-                  <mat-form-field style="width: 10%">
-                    <mat-label>Số lượng thùng</mat-label>
-                    <input type="number" min="1" step="1" matInput [(ngModel)]="invoiceLines[i].numberOfBoxes" placeholder="20 thùng">
-                  </mat-form-field>
+                    <mat-form-field style="width: 10%">
+                      <mat-label>Số lượng thùng</mat-label>
+                      <input type="number" min="1" step="1" name="{{i}}-numberOfBoxes" matInput [(ngModel)]="invoiceLines[i].numberOfBoxes" placeholder="20 thùng">
+                    </mat-form-field>
 
-                  <button mat-icon-button
-                          (click)="removeLine(i)"
-                          tabindex="-1"
-                          matTooltip="Xóa dòng {{i+1}}">
-                    <mat-icon>remove</mat-icon>
-                  </button>
+                    <button mat-icon-button
+                            (click)="removeLine(i)"
+                            tabindex="-1"
+                            type="button"
+                            matTooltip="Xóa dòng {{i+1}}">
+                      <mat-icon>remove</mat-icon>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button mat-mini-fab
-                color="primary"
-                matTooltip="Làm mới"
-                (click)="reset()">
-          <mat-icon>refresh</mat-icon>
-        </button>
-        <button mat-mini-fab
-                color="accent"
-                matTooltip="Thêm"
-                (click)="createInvoice()">
-          <mat-icon>add</mat-icon>
-        </button>
+        <div class="modal-footer">
+          <button mat-mini-fab
+                  color="primary"
+                  matTooltip="Làm mới"
+                  type="button"
+                  (click)="reset()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+          <button mat-mini-fab
+                  color="accent"
+                  matTooltip="Thêm"
+                  type="submit">
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</form>

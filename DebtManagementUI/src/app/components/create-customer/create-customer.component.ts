@@ -96,7 +96,6 @@ export class CreateCustomerComponent implements  OnInit {
     this.editMode = false
   }
 
-
   updateCustomer() {
     if (!this.customer.customerId || !this.customer.name || !this.customer.telephone || !this.customer.province) {
       this.error = 'Vui lòng điền đầy đủ thông tin'
@@ -128,5 +127,13 @@ export class CreateCustomerComponent implements  OnInit {
       type: 'customer',
       id: this.id
     })
+  }
+
+  onSubmit() {
+    if (this.editMode) {
+      this.updateCustomer()
+    } else {
+      this.createCustomer()
+    }
   }
 }
